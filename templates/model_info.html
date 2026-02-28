@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}How It Works | CardioGuard{% endblock %}
+
+{% block content %}
+<section class="page-shell">
+    <div class="container">
+        <div class="page-head text-center">
+            <span class="eyebrow"><i class="fa-solid fa-gears"></i> Pipeline Overview</span>
+            <h1 class="gradient-text">Model Lifecycle: From Data to Decision</h1>
+            <p>This workflow documents the core stages used to generate each risk prediction.</p>
+        </div>
+
+        <div class="timeline-wrap">
+            <article class="timeline-item">
+                <div class="step-index">1</div>
+                <div>
+                    <h4>Ingest and Validate Data</h4>
+                    <p>Load cardiovascular records and filter invalid or inconsistent values before training.</p>
+                </div>
+            </article>
+            <article class="timeline-item">
+                <div class="step-index">2</div>
+                <div>
+                    <h4>Preprocess Features</h4>
+                    <p>Normalize feature formatting, convert age units, and apply encoded categorical fields.</p>
+                </div>
+            </article>
+            <article class="timeline-item">
+                <div class="step-index">3</div>
+                <div>
+                    <h4>Train Random Forest</h4>
+                    <p>Use ensemble learning to improve generalization and reduce overfitting risk.</p>
+                </div>
+            </article>
+            <article class="timeline-item">
+                <div class="step-index">4</div>
+                <div>
+                    <h4>Evaluate and Serve</h4>
+                    <p>Measure model quality on holdout data, then expose prediction via Flask endpoints.</p>
+                </div>
+            </article>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{{ url_for('visuals') }}" class="btn btn-outline-secondary btn-lg">Review Validation Charts</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
