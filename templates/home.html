@@ -3,85 +3,86 @@
 {% block title %}Home | CardioGuard{% endblock %}
 
 {% block content %}
-<section class="hero-shell py-5">
+<section class="hero-shell home-hero">
     <div class="container">
-        <div class="row align-items-center g-5">
+        <div class="row align-items-center g-4 g-lg-5">
             <div class="col-lg-7">
-                <div class="hero-content">
-                    <span class="badge rounded-pill bg-light text-primary mb-3 px-3 py-2 shadow-sm">
-                        <i class="fa-solid fa-shield-heart me-2"></i>AI-Powered Risk Assessment
-                    </span>
-                    <h1 class="display-4 fw-bold mb-4">
-                        Cardiovascular Health <br>
-                        <span class="text-primary">Analysis Reinvented</span>
-                    </h1>
-                    <p class="lead text-muted mb-5">
-                        CardioGuard utilizes a Random Forest Machine Learning pipeline to analyze 11 critical health indicators, providing instant, data-driven cardiovascular risk insights.
-                    </p>
-                    <div class="d-flex gap-3">
-                        <a href="{{ url_for('predict') }}" class="btn btn-primary btn-lg px-4 shadow">
-                            Start Prediction <i class="fa-solid fa-arrow-right ms-2"></i>
-                        </a>
-                        <a href="{{ url_for('model_info') }}" class="btn btn-outline-secondary btn-lg px-4">
-                            View Pipeline
-                        </a>
+                <span class="eyebrow"><i class="fa-solid fa-heart-pulse"></i> AI-Powered Cardiovascular Screening</span>
+                <h1 class="hero-title home-title">
+                    Early Risk Detection with
+                    <span class="gradient-text">Data-Driven Precision</span>
+                </h1>
+                <p class="hero-copy mb-0">
+                    CardioGuard evaluates 11 clinical and lifestyle indicators through a trained Random Forest model to deliver immediate cardiovascular risk estimation.
+                </p>
+                <div class="hero-actions">
+                    <a href="{{ url_for('predict') }}" class="btn btn-accent btn-lg">
+                        Start Prediction <i class="fa-solid fa-arrow-right ms-2"></i>
+                    </a>
+                    <a href="{{ url_for('model_info') }}" class="btn btn-outline-secondary btn-lg">
+                        View Model Pipeline
+                    </a>
+                </div>
+                <div class="hero-metrics">
+                    <div class="metric-card">
+                        <span class="gradient-text">11 Inputs</span>
+                        <small>Health Indicators</small>
+                    </div>
+                    <div class="metric-card">
+                        <span class="gradient-text">Instant</span>
+                        <small>Prediction Response</small>
+                    </div>
+                    <div class="metric-card">
+                        <span class="gradient-text">RF Model</span>
+                        <small>Scikit-Learn Pipeline</small>
                     </div>
                 </div>
             </div>
 
             <div class="col-lg-5">
-                <div class="hero-image-container">
-                    <div class="glass-card p-2 shadow-lg rounded-4">
-                        <img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=1200&q=80" 
-                             alt="Medical Diagnostic Visualization" 
-                             class="img-fluid rounded-3 w-100 object-fit-cover" 
-                             style="max-height: 450px;">
-                    </div>
+                <div class="hero-image-wrap">
+                    <img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=1400&q=80"
+                        alt="Doctor analyzing cardiovascular report"
+                        class="hero-image">
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<section class="features-section py-5 bg-light">
+<section class="section-shell">
     <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="fw-bold">Platform Capabilities</h2>
-            <p class="text-muted">Explore the modules powering our clinical prediction engine.</p>
+        <div class="section-head text-center">
+            <h2 class="gradient-text">Platform Capabilities</h2>
+            <p>Explore the modules powering this clinical prediction workflow.</p>
         </div>
-        
+
         <div class="row g-4">
             <div class="col-md-4">
-                <div class="card h-100 border-0 shadow-sm p-4 text-center glass-hover">
-                    <div class="icon-box mb-3 mx-auto bg-primary-soft">
-                        <i class="fa-solid fa-database text-primary fs-3"></i>
-                    </div>
+                <article class="feature-tile h-100">
+                    <div class="tile-icon"><i class="fa-solid fa-database"></i></div>
                     <h4>Dataset Guide</h4>
-                    <p class="text-muted small">Learn about the 11 health features including blood pressure, cholesterol, and lifestyle factors.</p>
-                    <a href="{{ url_for('about') }}" class="text-decoration-none mt-auto">Learn More →</a>
-                </div>
+                    <p>Review the objective, examination, and lifestyle features used by the model.</p>
+                    <a href="{{ url_for('about') }}">Learn More <i class="fa-solid fa-arrow-right"></i></a>
+                </article>
             </div>
 
             <div class="col-md-4">
-                <div class="card h-100 border-0 shadow-sm p-4 text-center glass-hover">
-                    <div class="icon-box mb-3 mx-auto bg-success-soft">
-                        <i class="fa-solid fa-chart-line text-success fs-3"></i>
-                    </div>
+                <article class="feature-tile h-100">
+                    <div class="tile-icon"><i class="fa-solid fa-chart-line"></i></div>
                     <h4>Analytics</h4>
-                    <p class="text-muted small">Deep dive into model metrics: Confusion Matrix, ROC curves, and Feature Importance.</p>
-                    <a href="{{ url_for('visuals') }}" class="text-decoration-none mt-auto">View Metrics →</a>
-                </div>
+                    <p>Inspect model performance charts including ROC, learning curve, and confusion matrix.</p>
+                    <a href="{{ url_for('visuals') }}">View Metrics <i class="fa-solid fa-arrow-right"></i></a>
+                </article>
             </div>
 
             <div class="col-md-4">
-                <div class="card h-100 border-0 shadow-sm p-4 text-center glass-hover">
-                    <div class="icon-box mb-3 mx-auto bg-info-soft">
-                        <i class="fa-solid fa-microchip text-info fs-3"></i>
-                    </div>
+                <article class="feature-tile h-100">
+                    <div class="tile-icon"><i class="fa-solid fa-microchip"></i></div>
                     <h4>RF Pipeline</h4>
-                    <p class="text-muted small">A transparent look at the Scikit-Learn Random Forest architecture and training process.</p>
-                    <a href="{{ url_for('model_info') }}" class="text-decoration-none mt-auto">Technical Details →</a>
-                </div>
+                    <p>Understand preprocessing, training, and evaluation steps behind every prediction.</p>
+                    <a href="{{ url_for('model_info') }}">Technical Details <i class="fa-solid fa-arrow-right"></i></a>
+                </article>
             </div>
         </div>
     </div>
