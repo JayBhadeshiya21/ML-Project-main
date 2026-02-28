@@ -19,31 +19,21 @@ utils/
 # Python Cache
 # ===============================
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
 
 # ===============================
-# IDE / Editor
+# Virtual Environment
 # ===============================
-.vscode/
-.idea/
+venv/
+env/
+.venv/
 
 # ===============================
-# OS Files
+# Environment Variables
 # ===============================
-.DS_Store
-Thumbs.db
+.env
 
 # ===============================
 # Logs
 # ===============================
 *.log
-
-# ===============================
-# Environment Files
-# ===============================
-.env
-venv/
-env/
-.venv/
