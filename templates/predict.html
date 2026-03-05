@@ -1,54 +1,157 @@
 {% extends "base.html" %}
-
 {% block title %}Predict Risk | CardioGuard{% endblock %}
-
 {% block content %}
+
 <section class="page-shell">
     <div class="container">
         <div class="row g-4 align-items-start">
+
+            <!-- SIDEBAR -->
             <div class="col-lg-4">
                 <aside class="card ui-card sticky-panel p-4">
                     <span class="eyebrow"><i class="fa-solid fa-stethoscope"></i> Prediction Workspace</span>
-                    <h3 class="mt-3 gradient-text">Submit Patient Metrics</h3>
-                    <p class="text-muted mb-3">Complete each field accurately. The model evaluates your profile and returns a risk estimate in seconds.</p>
+                    <h3 style="font-family:var(--font-d);font-size:1.65rem;font-weight:900;margin:14px 0 10px">
+                        Submit Patient <span class="gradient-text">Metrics</span>
+                    </h3>
+                    <p style="color:var(--text-muted);font-size:.9rem;margin-bottom:0">
+                        Complete each field accurately. The model evaluates your profile and returns an instant risk estimate.
+                    </p>
+
+                    <!-- Privacy notice -->
                     <div class="signal-box">
                         <i class="fa-solid fa-user-shield"></i>
                         <div>
                             <strong>Privacy Notice</strong>
-                            <p class="mb-0">Input data is processed for inference and not stored.</p>
+                            <p>Input data is processed for inference only — never stored or logged.</p>
                         </div>
+                    </div>
+
+                    <!-- Tips -->
+                    <div style="margin-top:16px;padding:18px;background:var(--bg-soft);border:1px solid var(--border-s);border-radius:var(--r-md)">
+                        <div style="font-family:var(--font-b);font-size:.72rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--text-faint);margin-bottom:12px">Input Tips</div>
+                        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:9px">
+                            {% for tip in [
+                                'Use a recent blood pressure reading',
+                                'Fasting cholesterol/glucose preferred',
+                                'Active = exercise 3+ times per week'
+                            ] %}
+                            <li style="display:flex;gap:9px;align-items:flex-start;font-size:.82rem;color:var(--text-muted)">
+                                <i class="fa-solid fa-circle-dot" style="color:var(--red-400);margin-top:4px;font-size:.55rem;flex-shrink:0"></i>
+                                {{ tip }}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <!-- Accuracy badge -->
+                    <div style="margin-top:16px;text-align:center;padding:18px;background:var(--red-50);border:1px solid var(--red-100);border-radius:var(--r-md)">
+                        <div style="font-family:var(--font-d);font-size:2.2rem;font-weight:900;background:var(--grad-main);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text" data-count="73" data-suffix="%">0%</div>
+                        <div style="color:var(--text-muted);font-size:.74rem;text-transform:uppercase;letter-spacing:.07em;font-weight:700;margin-top:4px">Model Accuracy</div>
                     </div>
                 </aside>
             </div>
 
+            <!-- FORM -->
             <div class="col-lg-8">
                 <div class="card ui-card p-4 p-lg-5">
-                    <h4 class="mb-4 gradient-text">Cardiovascular Input Form</h4>
+                    <!-- Form header -->
+                    <div style="display:flex;align-items:center;gap:14px;margin-bottom:36px">
+                        <div style="width:48px;height:48px;border-radius:14px;background:var(--grad-main);display:flex;align-items:center;justify-content:center;box-shadow:var(--sh-red);flex-shrink:0">
+                            <i class="fa-solid fa-heart-pulse" style="color:#fff;font-size:1.2rem"></i>
+                        </div>
+                        <div>
+                            <h4 style="font-family:var(--font-d);font-size:1.4rem;font-weight:900;background:var(--grad-main);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:0">Cardiovascular Input Form</h4>
+                            <p style="font-size:.82rem;color:var(--text-muted);margin:0">11 clinical indicators &bull; instant prediction</p>
+                        </div>
+                    </div>
+
                     <form id="predictionForm">
-                        <h6 class="section-label">Demographics and Body Metrics</h6>
-                        <div class="row g-3 mb-4">
-                            <div class="col-md-6"><label for="age" class="form-label">Age (years)</label><input type="number" class="form-control" id="age" required min="10" max="100" placeholder="45"></div>
-                            <div class="col-md-6"><label for="gender" class="form-label">Gender</label><select class="form-select" id="gender" required><option value="" selected disabled>Select...</option><option value="2">Male</option><option value="1">Female</option></select></div>
-                            <div class="col-md-6"><label for="height" class="form-label">Height (cm)</label><input type="number" class="form-control" id="height" required min="50" max="250" placeholder="175"></div>
-                            <div class="col-md-6"><label for="weight" class="form-label">Weight (kg)</label><input type="number" class="form-control" id="weight" required min="30" max="200" placeholder="70"></div>
+                        <!-- SECTION 1 -->
+                        <h6 class="section-label">Demographics &amp; Body Metrics</h6>
+                        <div class="row g-3 mb-5">
+                            <div class="col-md-6">
+                                <label for="age" class="form-label">Age (years)</label>
+                                <input type="number" class="form-control" id="age" required min="10" max="100" placeholder="45">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="gender" class="form-label">Gender</label>
+                                <select class="form-select" id="gender" required>
+                                    <option value="" selected disabled>Select…</option>
+                                    <option value="2">Male</option>
+                                    <option value="1">Female</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="height" class="form-label">Height (cm)</label>
+                                <input type="number" class="form-control" id="height" required min="50" max="250" placeholder="175">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="weight" class="form-label">Weight (kg)</label>
+                                <input type="number" class="form-control" id="weight" required min="30" max="200" placeholder="70">
+                            </div>
                         </div>
 
-                        <h6 class="section-label">Vitals and Lab Values</h6>
-                        <div class="row g-3 mb-4">
-                            <div class="col-md-6"><label for="ap_hi" class="form-label">Systolic BP</label><input type="number" class="form-control" id="ap_hi" required placeholder="120" min="60" max="250"></div>
-                            <div class="col-md-6"><label for="ap_lo" class="form-label">Diastolic BP</label><input type="number" class="form-control" id="ap_lo" required placeholder="80" min="40" max="150"></div>
-                            <div class="col-md-6"><label for="cholesterol" class="form-label">Cholesterol</label><select class="form-select" id="cholesterol" required><option value="1">Normal</option><option value="2">Above Normal</option><option value="3">Well Above Normal</option></select></div>
-                            <div class="col-md-6"><label for="gluc" class="form-label">Glucose</label><select class="form-select" id="gluc" required><option value="1">Normal</option><option value="2">Above Normal</option><option value="3">Well Above Normal</option></select></div>
+                        <!-- SECTION 2 -->
+                        <h6 class="section-label">Vitals &amp; Lab Values</h6>
+                        <div class="row g-3 mb-5">
+                            <div class="col-md-6">
+                                <label for="ap_hi" class="form-label">Systolic BP (mmHg)</label>
+                                <input type="number" class="form-control" id="ap_hi" required placeholder="120" min="60" max="250">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="ap_lo" class="form-label">Diastolic BP (mmHg)</label>
+                                <input type="number" class="form-control" id="ap_lo" required placeholder="80" min="40" max="150">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="cholesterol" class="form-label">Cholesterol Level</label>
+                                <select class="form-select" id="cholesterol" required>
+                                    <option value="1">Normal</option>
+                                    <option value="2">Above Normal</option>
+                                    <option value="3">Well Above Normal</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="gluc" class="form-label">Glucose Level</label>
+                                <select class="form-select" id="gluc" required>
+                                    <option value="1">Normal</option>
+                                    <option value="2">Above Normal</option>
+                                    <option value="3">Well Above Normal</option>
+                                </select>
+                            </div>
                         </div>
 
+                        <!-- SECTION 3 -->
                         <h6 class="section-label">Lifestyle Indicators</h6>
-                        <div class="row g-3 mb-4">
-                            <div class="col-md-4"><label class="check-box-card"><input class="form-check-input" type="checkbox" id="smoke"><span>Smoker</span></label></div>
-                            <div class="col-md-4"><label class="check-box-card"><input class="form-check-input" type="checkbox" id="alco"><span>Alcohol Intake</span></label></div>
-                            <div class="col-md-4"><label class="check-box-card"><input class="form-check-input" type="checkbox" id="active" checked><span>Physically Active</span></label></div>
+                        <div class="row g-3 mb-5">
+                            <div class="col-md-4">
+                                <label class="check-box-card">
+                                    <input class="form-check-input" type="checkbox" id="smoke">
+                                    <span><i class="fa-solid fa-smoking me-2" style="color:var(--text-faint)"></i>Smoker</span>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="check-box-card">
+                                    <input class="form-check-input" type="checkbox" id="alco">
+                                    <span><i class="fa-solid fa-wine-glass me-2" style="color:var(--text-faint)"></i>Alcohol Use</span>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="check-box-card">
+                                    <input class="form-check-input" type="checkbox" id="active" checked>
+                                    <span><i class="fa-solid fa-person-running me-2" style="color:var(--text-faint)"></i>Physically Active</span>
+                                </label>
+                            </div>
                         </div>
 
-                        <button type="submit" class="btn btn-accent btn-lg w-100" id="predictBtn">Analyze Risk <i class="fa-solid fa-arrow-right ms-2"></i></button>
+                        <!-- BMI live preview -->
+                        <div id="bmiPreview" style="display:none;margin-bottom:24px;padding:14px 18px;background:var(--red-50);border:1px solid var(--red-100);border-radius:var(--r-sm);display:flex;align-items:center;gap:12px">
+                            <i class="fa-solid fa-calculator" style="color:var(--red-500)"></i>
+                            <span style="font-size:.9rem;color:var(--text-body)">Estimated BMI: <strong id="bmiVal" style="color:var(--red-600)">—</strong></span>
+                        </div>
+
+                        <button type="submit" class="btn btn-accent btn-lg w-100" id="predictBtn" style="font-size:1.05rem;padding:16px">
+                            <i class="fa-solid fa-bolt me-2"></i>Analyse Cardiovascular Risk
+                        </button>
                     </form>
                 </div>
             </div>
@@ -56,37 +159,70 @@
     </div>
 </section>
 
+<!-- RESULT MODAL -->
 <div class="modal fade" id="resultModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 rounded-4 shadow-lg text-center p-4">
+        <div class="modal-content p-4 text-center">
             <div class="modal-body">
+                <!-- Loading -->
                 <div id="loadingSpinner" class="d-none">
-                    <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
-                    <p class="mt-3 text-muted">Analyzing your data...</p>
+                    <div style="position:relative;width:60px;height:60px;margin:0 auto 20px">
+                        <svg width="60" height="60" viewBox="0 0 60 60">
+                            <circle cx="30" cy="30" r="26" fill="none" stroke="var(--red-100)" stroke-width="4"/>
+                            <circle cx="30" cy="30" r="26" fill="none" stroke="var(--red-500)" stroke-width="4"
+                                    stroke-dasharray="164" stroke-dashoffset="120"
+                                    style="transform-origin:center;animation:spin-slow 1s linear infinite"/>
+                        </svg>
+                    </div>
+                    <p style="color:var(--text-muted);font-size:.95rem">Analysing your cardiovascular profile…</p>
                 </div>
 
+                <!-- Result -->
                 <div id="resultContent" class="d-none">
                     <div class="mb-3" id="iconContainer"></div>
-                    <h2 class="fw-bold mb-2" id="resultTitle">Result</h2>
-                    <p class="lead mb-4" id="resultMessage">Message</p>
+                    <h2 class="fw-bold mb-2" id="resultTitle"
+                        style="font-family:var(--font-d);font-size:1.8rem;color:var(--text-dark)">Result</h2>
+                    <p class="lead mb-4" id="resultMessage" style="color:var(--text-muted);font-size:1rem">Message</p>
 
-                    <div class="alert alert-warning border-0 shadow-sm text-start small d-flex align-items-start">
-                        <i class="fa-solid fa-circle-exclamation text-danger me-2 mt-1"></i>
+                    <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:var(--r-md);padding:16px;text-align:left;font-size:.83rem;display:flex;gap:12px;align-items:flex-start;margin-bottom:20px">
+                        <i class="fa-solid fa-circle-exclamation" style="color:var(--amber);margin-top:2px;flex-shrink:0"></i>
                         <div>
-                            <strong>MEDICAL DISCLAIMER:</strong> This tool is for educational use only.
-                            Model accuracy is around <span class="badge bg-danger text-white">73%</span>.
-                            It does not replace professional diagnosis.
+                            <strong style="font-family:var(--font-b);color:#92400e">MEDICAL DISCLAIMER</strong><br>
+                            <span style="color:#a16207">
+                                This tool is for educational use only. Model accuracy is approximately
+                                <strong style="color:var(--red-600)">73%</strong>.
+                                It does not replace professional medical diagnosis.
+                            </span>
                         </div>
                     </div>
 
-                    <button type="button" class="btn btn-outline-secondary rounded-pill px-4 mt-2" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 {% endblock %}
 
 {% block extra_js %}
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<script>
+    /* Live BMI preview */
+    function updateBMI(){
+        const h = parseFloat(document.getElementById('height').value);
+        const w = parseFloat(document.getElementById('weight').value);
+        const box = document.getElementById('bmiPreview');
+        const val = document.getElementById('bmiVal');
+        if(h > 50 && w > 10){
+            const bmi = (w / ((h/100)**2)).toFixed(1);
+            val.textContent = bmi;
+            box.style.display = 'flex';
+        } else {
+            box.style.display = 'none';
+        }
+    }
+    document.getElementById('height').addEventListener('input', updateBMI);
+    document.getElementById('weight').addEventListener('input', updateBMI);
+</script>
 {% endblock %}

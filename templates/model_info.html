@@ -1,50 +1,99 @@
 {% extends "base.html" %}
-
 {% block title %}How It Works | CardioGuard{% endblock %}
-
 {% block content %}
+
 <section class="page-shell">
     <div class="container">
+
         <div class="page-head text-center">
             <span class="eyebrow"><i class="fa-solid fa-gears"></i> Pipeline Overview</span>
             <h1 class="gradient-text">Model Lifecycle: From Data to Decision</h1>
-            <p>This workflow documents the core stages used to generate each risk prediction.</p>
+            <p>This workflow documents the core stages used to generate each cardiovascular risk prediction in real-time.</p>
         </div>
 
-        <div class="timeline-wrap">
-            <article class="timeline-item">
-                <div class="step-index">1</div>
-                <div>
-                    <h4>Ingest and Validate Data</h4>
-                    <p>Load cardiovascular records and filter invalid or inconsistent values before training.</p>
-                </div>
-            </article>
-            <article class="timeline-item">
-                <div class="step-index">2</div>
-                <div>
-                    <h4>Preprocess Features</h4>
-                    <p>Normalize feature formatting, convert age units, and apply encoded categorical fields.</p>
-                </div>
-            </article>
-            <article class="timeline-item">
-                <div class="step-index">3</div>
-                <div>
-                    <h4>Train Random Forest</h4>
-                    <p>Use ensemble learning to improve generalization and reduce overfitting risk.</p>
-                </div>
-            </article>
-            <article class="timeline-item">
-                <div class="step-index">4</div>
-                <div>
-                    <h4>Evaluate and Serve</h4>
-                    <p>Measure model quality on holdout data, then expose prediction via Flask endpoints.</p>
-                </div>
-            </article>
-        </div>
+        <div class="row g-5 align-items-start">
 
-        <div class="text-center mt-4">
-            <a href="{{ url_for('visuals') }}" class="btn btn-outline-secondary btn-lg">Review Validation Charts</a>
+            <!-- Timeline -->
+            <div class="col-lg-7">
+                <div class="timeline-wrap">
+                    <article class="timeline-item">
+                        <div class="step-index">1</div>
+                        <h4>Ingest and Validate Data</h4>
+                        <p>Load cardiovascular records from the public dataset and filter clinically inconsistent values — such as negative blood pressure readings or physiologically impossible outliers — before training begins.</p>
+                    </article>
+                    <article class="timeline-item">
+                        <div class="step-index">2</div>
+                        <h4>Preprocess Features</h4>
+                        <p>Convert age from days to years, compute BMI from height and weight, apply ordinal encoding to cholesterol and glucose levels, and normalise feature ranges for consistent model input.</p>
+                    </article>
+                    <article class="timeline-item">
+                        <div class="step-index">3</div>
+                        <h4>Train Random Forest</h4>
+                        <p>Use an ensemble of decision trees to improve generalisation, reduce overfitting, and handle the non-linear feature interactions that are common in cardiovascular clinical data.</p>
+                    </article>
+                    <article class="timeline-item">
+                        <div class="step-index">4</div>
+                        <h4>Evaluate and Serve</h4>
+                        <p>Measure model quality on a held-out test split using accuracy, ROC-AUC, and confusion matrix analysis. The trained model is then deployed via Flask endpoints for real-time inference.</p>
+                    </article>
+                </div>
+
+                <div class="mt-4 reveal">
+                    <a href="{{ url_for('visuals') }}" class="btn btn-outline-secondary btn-lg">
+                        <i class="fa-solid fa-chart-column me-2"></i>Review Validation Charts
+                    </a>
+                </div>
+            </div>
+
+            <!-- Info panel -->
+            <div class="col-lg-5">
+                <!-- Model specs -->
+                <div class="card ui-card p-4 mb-4 reveal">
+                    <span class="eyebrow mb-3"><i class="fa-solid fa-microchip"></i> Model Details</span>
+                    <div style="display:flex;flex-direction:column;gap:0">
+                        {% set rows = [
+                            ('Algorithm',   'Random Forest'),
+                            ('Framework',   'Scikit-Learn'),
+                            ('Backend',     'Flask (Python)'),
+                            ('Input Features', '11 Variables'),
+                            ('Test Accuracy', '~73%')
+                        ] %}
+                        {% for label, val in rows %}
+                        <div style="display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid var(--border-s){% if loop.last %};border-bottom:none{% endif %}">
+                            <span style="color:var(--text-muted);font-size:.875rem">{{ label }}</span>
+                            {% if loop.last %}
+                            <span style="font-family:var(--font-d);font-weight:900;font-size:1.05rem;background:var(--grad-main);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">{{ val }}</span>
+                            {% else %}
+                            <span style="font-family:var(--font-b);font-weight:700;font-size:.9rem;color:var(--text-dark)">{{ val }}</span>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Key choices -->
+                <div class="card ui-card p-4 reveal reveal-delay-1">
+                    <span class="eyebrow mb-3"><i class="fa-solid fa-lightbulb"></i> Key Design Choices</span>
+                    <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:14px">
+                        {% set points = [
+                            'Ensemble trees reduce variance vs. single decision trees',
+                            'Threshold-based outlier removal for blood pressure values',
+                            'BMI derived feature engineered from height and weight',
+                            'Probability scores returned for calibrated confidence output',
+                        ] %}
+                        {% for p in points %}
+                        <li style="display:flex;gap:11px;align-items:flex-start">
+                            <span style="width:22px;height:22px;border-radius:50%;background:var(--grad-main);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">
+                                <i class="fa-solid fa-check" style="color:#fff;font-size:.6rem"></i>
+                            </span>
+                            <span style="color:var(--text-muted);font-size:.875rem;line-height:1.55">{{ p }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 </section>
+
 {% endblock %}

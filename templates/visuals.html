@@ -1,38 +1,93 @@
 {% extends "base.html" %}
-
 {% block title %}Visualizations | CardioGuard{% endblock %}
-
 {% block content %}
+
 <section class="page-shell">
     <div class="container">
+
         <div class="page-head text-center">
             <span class="eyebrow"><i class="fa-solid fa-chart-column"></i> Monitoring Dashboard</span>
-            <h1 class="gradient-text">Model Validation and Data Insight Visuals</h1>
-            <p>Track model behavior and dataset distributions using pre-generated analytical outputs.</p>
+            <h1 class="gradient-text">Model Validation &amp; Data Insight Visuals</h1>
+            <p>Track model behaviour and dataset distributions using pre-generated analytical outputs from the training pipeline.</p>
         </div>
 
-        <ul class="nav nav-pills justify-content-center ui-pills mb-4" id="pills-tab" role="tablist">
-            <li class="nav-item" role="presentation"><button class="nav-link active" id="pills-model-tab" data-bs-toggle="pill" data-bs-target="#pills-model" type="button">Model Performance</button></li>
-            <li class="nav-item" role="presentation"><button class="nav-link" id="pills-data-tab" data-bs-toggle="pill" data-bs-target="#pills-data" type="button">Data Insights</button></li>
-        </ul>
+        <div class="d-flex justify-content-center mb-5">
+            <ul class="nav nav-pills ui-pills" id="pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="pills-model-tab" data-bs-toggle="pill" data-bs-target="#pills-model" type="button">
+                        <i class="fa-solid fa-chart-line me-2"></i>Model Performance
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-data-tab" data-bs-toggle="pill" data-bs-target="#pills-data" type="button">
+                        <i class="fa-solid fa-database me-2"></i>Data Insights
+                    </button>
+                </li>
+            </ul>
+        </div>
 
         <div class="tab-content" id="pills-tabContent">
+
+            <!-- MODEL PERFORMANCE -->
             <div class="tab-pane fade show active" id="pills-model">
                 <div class="row g-4">
-                    <div class="col-lg-6"><article class="card plot-card h-100"><h5>Confusion Matrix</h5><img src="{{ url_for('static', filename='plots/confusion_matrix.png') }}" class="img-fluid rounded" alt="Confusion Matrix" onerror="this.src='https://via.placeholder.com/600x400?text=Run+Model+Training';"><p>Compares predicted and actual classes to reveal error distribution.</p></article></div>
-                    <div class="col-lg-6"><article class="card plot-card h-100"><h5>Feature Importance</h5><img src="{{ url_for('static', filename='plots/feature_importance.png') }}" class="img-fluid rounded" alt="Feature Importance" onerror="this.src='https://via.placeholder.com/600x400?text=Run+Model+Training';"><p>Highlights features with the strongest contribution to predictions.</p></article></div>
-                    <div class="col-lg-6"><article class="card plot-card h-100"><h5>ROC Curve</h5><img src="{{ url_for('static', filename='plots/roc_curve.png') }}" class="img-fluid rounded" alt="ROC Curve" onerror="this.src='https://via.placeholder.com/600x400?text=Run+Model+Training';"><p>Measures the sensitivity-specificity tradeoff across thresholds.</p></article></div>
-                    <div class="col-lg-6"><article class="card plot-card h-100"><h5>Learning Curve</h5><img src="{{ url_for('static', filename='plots/learning_curve.png') }}" class="img-fluid rounded" alt="Learning Curve" onerror="this.src='https://via.placeholder.com/600x400?text=Run+Model+Training';"><p>Shows convergence as training sample size increases.</p></article></div>
+                    {% set perf_charts = [
+                        ('fa-grid-2',     'Confusion Matrix',   'confusion_matrix',   'red-600',  'Compares predicted and actual classes — reveals error distribution across true positives and false negatives.'),
+                        ('fa-ranking-star','Feature Importance', 'feature_importance', 'amber',    'Highlights the features with the strongest contribution to cardiovascular risk predictions.'),
+                        ('fa-chart-area', 'ROC Curve',          'roc_curve',          'teal',     'Measures the sensitivity–specificity tradeoff across all decision thresholds. Higher AUC = better discrimination.'),
+                        ('fa-chart-line', 'Learning Curve',     'learning_curve',     'red-600',  'Shows convergence of training and validation accuracy as training sample size increases.')
+                    ] %}
+                    {% for icon, title, filename, color, desc in perf_charts %}
+                    <div class="col-lg-6">
+                        <article class="plot-card h-100">
+                            <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+                                <div class="chart-icon"
+                                     style="background:var(--red-50);border:1px solid var(--red-100)">
+                                    <i class="fa-solid {{ icon }}"
+                                       style="background:var(--grad-main);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text"></i>
+                                </div>
+                                <h5 style="margin:0">{{ title }}</h5>
+                            </div>
+                            <img src="{{ url_for('static', filename='plots/' ~ filename ~ '.png') }}"
+                                 class="img-fluid rounded" alt="{{ title }}"
+                                 onerror="this.src='https://placehold.co/600x380/f6f4f1/a8a29e?text=Run+Model+Training'">
+                            <p>{{ desc }}</p>
+                        </article>
+                    </div>
+                    {% endfor %}
                 </div>
             </div>
 
+            <!-- DATA INSIGHTS -->
             <div class="tab-pane fade" id="pills-data">
                 <div class="row g-4 justify-content-center">
-                    <div class="col-lg-8"><article class="card plot-card"><h5>Age Distribution</h5><img src="{{ url_for('static', filename='plots/age_dist.png') }}" class="img-fluid rounded" alt="Age Distribution" onerror="this.src='https://via.placeholder.com/600x400?text=Run+Model+Training';"><p>Age profile comparison for low-risk and risk-positive classes.</p></article></div>
-                    <div class="col-lg-8"><article class="card plot-card"><h5>Prediction Probabilities</h5><img src="{{ url_for('static', filename='plots/prob_dist.png') }}" class="img-fluid rounded" alt="Probability Distribution" onerror="this.src='https://via.placeholder.com/600x400?text=Run+Model+Training';"><p>Confidence score spread generated by the trained classifier.</p></article></div>
+                    {% set data_charts = [
+                        ('fa-users',       'Age Distribution',         'age_dist',  'Age profile comparison between low-risk (no CVD) and risk-positive (CVD present) patient classes.'),
+                        ('fa-wave-square', 'Prediction Probabilities', 'prob_dist', 'Confidence score spread generated by the trained classifier across the full test set population.')
+                    ] %}
+                    {% for icon, title, filename, desc in data_charts %}
+                    <div class="col-lg-8">
+                        <article class="plot-card">
+                            <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+                                <div class="chart-icon"
+                                     style="background:var(--red-50);border:1px solid var(--red-100)">
+                                    <i class="fa-solid {{ icon }}"
+                                       style="background:var(--grad-main);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text"></i>
+                                </div>
+                                <h5 style="margin:0">{{ title }}</h5>
+                            </div>
+                            <img src="{{ url_for('static', filename='plots/' ~ filename ~ '.png') }}"
+                                 class="img-fluid rounded" alt="{{ title }}"
+                                 onerror="this.src='https://placehold.co/700x360/f6f4f1/a8a29e?text=Run+Model+Training'">
+                            <p>{{ desc }}</p>
+                        </article>
+                    </div>
+                    {% endfor %}
                 </div>
             </div>
+
         </div>
     </div>
 </section>
+
 {% endblock %}
